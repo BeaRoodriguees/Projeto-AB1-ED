@@ -6,6 +6,7 @@
 #define 0 FALSE
 
 // definir nomes melhores
+// implementar funções: removerRepetido, removerElemRepetido e qntRepetido
 
 typedef struct{
     char nome[60];
@@ -42,9 +43,6 @@ int quantidade (ListaE lista){
 }
 
 int qntRepetido (ListaE lista){
-    for (int i = 0; i < lista.qnt; i++){
-        if
-    }
 }
 
 int inserirInicio (ListaE *lista, Elem novo){
@@ -116,19 +114,7 @@ int remover (ListaE *lista, Elem *elem){
 }
 
 void removerRepetido (){
-    
-
 }
 
 int removerElemRepetido (ListaE *lista, char elem){
-    int pos = pesquisarElem(*lista, elem);
-
-    if (pos < 0) return;
-
-    for (int i = pos; i < lista.qnt; i++)
-        lista->elementos[i] = lista->elementos[i+1];
-
-    lista->qnt--;
-
-    return removerRepetido(lista, elem);
 }
