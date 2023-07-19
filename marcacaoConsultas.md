@@ -1,5 +1,9 @@
 # Marcação de consultas
 
+# Verificação
+- [x] Nome válido;
+- [ ] CPF válido;
+
 # Visões:
      1 - Cliente = Marcação
      2 - Medico = Pacientes - Consultas
@@ -7,4 +11,6 @@
     
 ## Visão - Calendário
 Sem dias de domingos, feriados nacionais - não pode marcar
+
+
 
