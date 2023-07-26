@@ -4,9 +4,10 @@
 #include <stdlib.h>
 #include <ctype.h> //Necessáro para usar as funções desta biblioteca.
 
-void string_Separator(char src_string[], char dst_string[])//1º parâmetro é a string a ser separada, 2º parâmetro é a string que vai receber a primeira string após a remoção dos tokens.
+//1º parâmetro é a string a ser separada, 2º parâmetro é a string que vai receber a primeira string após a remoção dos tokens.
+void cpf_Separator(char src_string[], char dst_string[])
 {
-    char t[] = ".-"; //tokens a serem removidos da primeira string.
+    char t[] = ".- \n"; //tokens a serem removidos da primeira string.
     char *portion = strtok(src_string, t);
 
     while (portion != NULL)
@@ -63,7 +64,9 @@ int cpf_Autentication(char cpf[]) // Recebe a string cpf após remoção dos tok
         {
             return 1; // Retorna 1 caso o cpf seja válido.
         }
+        printf("Erro! CPF inválido\n");
         return 0; // Retorna 0 caso o cpf seja inválido.
     }
-    return -1; // Retorna -1 caso o formato do cpf seja inválido.
+    printf("Erro! CPF no formato inválido.\n");
+    return 0; // Retorna -1 caso o formato do cpf seja inválido.
 }
