@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 int isBissexto(int ano)
 {
     if (ano % 400 == 0)
