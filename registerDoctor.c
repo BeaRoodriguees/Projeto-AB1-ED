@@ -41,12 +41,12 @@ int main(){
         return -1;
     }
     if (searchUser()){ //Confere se o médico já possui cadastro
-        printf("O paciente já possui cadastro.\n");
+        printf("O médico já possui cadastro.\n");
         return -1;
     }
 
     //Gravação das entradas em um arquivo de texto listdoctors.txt
-    FILE *doctorValid = fopen("data/listdoctors.txt", "ab");
+    FILE *doctorValid = fopen("data/listDoctors.txt", "ab");
     fprintf(doctorValid, "%s %s %s ", name, cpf_save, specialties);
 
    for(int j = 0; j < i; j++)

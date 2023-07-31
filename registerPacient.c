@@ -1,50 +1,110 @@
 #include <stdio.h>
 #include "libs/checkName.c"
 #include "libs/checkCPF.c"
-#include "libs/searchUser.c"
 #define MAX_LEN 100
 
-//falta implentar se o usuário já existe
-//Algoritmo cadastra apenas 1 paciente
+//obtem os dados gerados pelo formulario
+int getPacient(char *nome, char *cpf_s, char *doenca){
+    FILE *pacientInfos = fopen("data/pacient.txt", "r");
+    char temp[2];
+    
+    if (pacientInfos == NULL){
+        printf("Erro ao abrir o arquivo\n");
+        return 0;
+    }
 
-int main(){
-    char name[MAX_LEN];
-    char disease[MAX_LEN];
-    char cpf_s[15], cpf_save[15], cpf_clean[12];
+    fgets(nome, MAX_LEN, pacientInfos);
+    nome[strcspn(nome, "\n")] = 0;
+    fgets(cpf_s, 15, pacientInfos);
+    fgets(temp, 2, pacientInfos);
+    fgets(doenca, MAX_LEN, pacientInfos);
+    doenca[strcspn(doenca, "\n")] = 0;
+    
+    fclose(pacientInfos);
+    return 1;
+
+}
+
+// funcao que ler o arquivo carrega as strings e faz uma busca "linear" verificando se o cpf consta no .txt
+int validaCad(char *cpf_s){ 
+    char cpf_check [15];
+    char temp_name[MAX_LEN];
+    char temp_doenca[MAX_LEN];
     char temp[2];
 
-    FILE *patientInfos = fopen("data/patient.txt", "r"); //abre o arquivo patient.txt onde tem as informações do paciente
+    FILE *pacientValid = fopen("data/listPacients.txt", "r");
     
-    //bloco de leitura das entradas
-    fgets(name, MAX_LEN, patientInfos);
-    name[strcspn(name, "\n")] = 0;
-    fgets(cpf_s, 15, patientInfos);
-    fgets(temp, 2, patientInfos);
-    fgets(disease, MAX_LEN, patientInfos);
-    disease[strcspn(disease, "\n")] = 0;
 
-    strcpy(cpf_save, cpf_s); //salvar o cpf em um backup
-    cpf_Separator(cpf_s, cpf_clean); //limpar o cpf
+    if (pacientValid == NULL){
+        printf("Erro ao abrir o arquivo\n");
+        return 0;
+    }
 
+    while (fgets(temp_name, MAX_LEN, pacientValid)!=NULL){
+        fgets(cpf_check, 15, pacientValid);
+        fgets(temp, 2, pacientValid);
+        fgets(temp_doenca, MAX_LEN, pacientValid);
 
-    //Checagem da validade das entradas
-    if(!checkName(name)){
-        printf("Erro! nome inválido.\n");
+        if (strcmp(cpf_check, cpf_s)){
+            printf("%s  ", cpf_s);
+            printf("CPF já utilizado.\n");
+            fclose(pacientValid);
+            return 0;
+        }
+    }
+
+    fclose(pacientValid);
+    return 1;
+} 
+
+//funçao que salva o cadastro
+int salvaCad(char *nome, char *cpf_save, char *doenca ){
+    char cpf_check [15];
+    char temp_name[MAX_LEN];
+    char temp_doenca[MAX_LEN];
+
+    FILE *pacientValid = fopen("listPacients.txt", "ab");
+
+    if (pacientValid == NULL){
+        printf("Erro ao abrir o arquivo\n");
+        return 0;
+    }
+
+    while (fscanf(pacientValid, "%s %s %s", temp_name, cpf_check, temp_doenca) != EOF){   
+        printf("%s",cpf_check);
+        
+        if (cpf_check == cpf_save){   
+            printf("CPF já utilizado");
+            fclose(pacientValid);
+            return 0;
+        }
+    }
+
+    fprintf(pacientValid, "%s\n%s\n%s\n", nome, cpf_save, doenca);
+    fclose(pacientValid);
+}
+
+int main(){
+    char nome[MAX_LEN], temp_nome[MAX_LEN];
+    char doenca[MAX_LEN],temp_doenca[MAX_LEN];
+    char cpf_s[15], cpf_save[15], cpf_clean[11];
+
+    getPacient(nome, cpf_s,doenca);
+
+    strcpy(cpf_save, cpf_s);
+    cpf_Separator(cpf_s, cpf_clean);
+
+    if(!checkName(nome)){
+        printf("Erro! Nome inválido.\n");
         return -1;
     }
     if(!cpf_Autentication(cpf_clean)){
         return -1;
     }
-    if (searchUser()){ //ver se o paciente já possui cadastro
-        printf("O paciente já possui cadastro.\n");
-        return -1;
+
+    if(validaCad(cpf_save)){
+        salvaCad(nome, cpf_save, doenca);
     }
 
-    //Gravação das entradas em um arquivo de texto lispatients
-    FILE *patientValid = fopen("data/listpatients.txt", "ab");
-    fprintf(patientValid, "%s %s %s\n", name, cpf_save, disease);
-    
-    fclose(patientValid);
-    fclose(patientInfos);
     return 0;
 }
