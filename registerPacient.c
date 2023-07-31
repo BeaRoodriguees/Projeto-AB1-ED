@@ -66,15 +66,15 @@ int salvaCad(char *nome, char *cpf_save, char *doenca ){
     FILE *pacientValid = fopen("listPacients.txt", "ab");
 
     if (pacientValid == NULL){
-        printf("Erro ao abrir o arquivo\n");
+        printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
 
     while (fscanf(pacientValid, "%s %s %s", temp_name, cpf_check, temp_doenca) != EOF){   
-        printf("%s",cpf_check);
+        printf("%s  %s.", cpf_check, cpf_save);
         
         if (cpf_check == cpf_save){   
-            printf("CPF já utilizado");
+            printf("CPF já utilizado.\n");
             fclose(pacientValid);
             return 0;
         }
@@ -94,6 +94,7 @@ int main(){
     strcpy(cpf_save, cpf_s);
     cpf_Separator(cpf_s, cpf_clean);
 
+printf("%s", nome);
     if(!checkName(nome)){
         printf("Erro! Nome inválido.\n");
         return -1;
