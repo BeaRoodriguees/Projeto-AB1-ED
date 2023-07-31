@@ -3,6 +3,11 @@
 #include "libs/checkCPF.c"
 #define MAX_LEN 100
 
+/* 
+Não está pegando as doenças
+*/
+
+
 //obtem os dados gerados pelo formulario
 int getPacient(char *nome, char *cpf_s, char *doenca){
     FILE *pacientInfos = fopen("data/pacient.txt", "r");
@@ -19,12 +24,9 @@ int getPacient(char *nome, char *cpf_s, char *doenca){
     fgets(temp, 2, pacientInfos);
     fgets(doenca, MAX_LEN, pacientInfos);
     doenca[strcspn(doenca, "\n")] = 0;
-    
-
 
     fclose(pacientInfos);
     return 1;
-
 }
 
 // funcao que ler o arquivo carrega as strings e faz uma busca "linear" verificando se o cpf consta no .txt
@@ -41,7 +43,7 @@ int validaCad(char *cpf_s){
         return 0;
     }
 
-    while (fgets(temp_name, MAX_LEN, pacientValid)!=NULL){
+    while (fgets(temp_name, MAX_LEN, pacientValid) != NULL){
         fgets(cpf_check, 15, pacientValid);
         fgets(temp, 2, pacientValid);
         fgets(temp_doenca, MAX_LEN, pacientValid);
@@ -59,7 +61,7 @@ int validaCad(char *cpf_s){
 } 
 
 //funçao que salva o cadastro
-int salvaCad(char *nome, char *cpf_save, char *doenca ){
+int salvaCad(char *nome, char *cpf_save, char *doenca){
     char cpf_check [15];
     char temp_name[MAX_LEN];
     char temp_doenca[MAX_LEN];
@@ -71,23 +73,13 @@ int salvaCad(char *nome, char *cpf_save, char *doenca ){
         return 0;
     }
 
-    while (fscanf(pacientValid, "%s %s %s", temp_name, cpf_check, temp_doenca) != EOF){   
-        if (cpf_check == cpf_save){
-            printf("CPF já utilizado.\n");
-            fclose(pacientValid);
-            return 0;
-        }
-    }
-
-        printf("%s\n", doenca);
-
     fprintf(pacientValid, "%s\n%s\n%s\n", nome, cpf_save, doenca);
     fclose(pacientValid);
 }
 
 int main(){
     char nome[MAX_LEN], temp_nome[MAX_LEN];
-    char doenca[MAX_LEN],temp_doenca[MAX_LEN];
+    char doenca[MAX_LEN], temp_doenca[MAX_LEN];
     char cpf_s[15], cpf_save[15], cpf_clean[11];
     char temp[2];
 
