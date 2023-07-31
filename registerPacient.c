@@ -20,6 +20,8 @@ int getPacient(char *nome, char *cpf_s, char *doenca){
     fgets(doenca, MAX_LEN, pacientInfos);
     doenca[strcspn(doenca, "\n")] = 0;
     
+
+
     fclose(pacientInfos);
     return 1;
 
@@ -33,7 +35,6 @@ int validaCad(char *cpf_s){
     char temp[2];
 
     FILE *pacientValid = fopen("data/listPacients.txt", "r");
-    
 
     if (pacientValid == NULL){
         printf("Erro ao abrir o arquivo\n");
@@ -45,9 +46,9 @@ int validaCad(char *cpf_s){
         fgets(temp, 2, pacientValid);
         fgets(temp_doenca, MAX_LEN, pacientValid);
 
-        if (strcmp(cpf_check, cpf_s)){
-            printf("%s  ", cpf_s);
-            printf("CPF já utilizado.\n");
+        if (strcmp(cpf_check, cpf_s) == 0){
+            printf("%s ", cpf_s);
+            printf("é CPF já utilizado.\n");
             fclose(pacientValid);
             return 0;
         }
@@ -63,7 +64,7 @@ int salvaCad(char *nome, char *cpf_save, char *doenca ){
     char temp_name[MAX_LEN];
     char temp_doenca[MAX_LEN];
 
-    FILE *pacientValid = fopen("listPacients.txt", "ab");
+    FILE *pacientValid = fopen("data/listPacients.txt", "ab");
 
     if (pacientValid == NULL){
         printf("Erro ao abrir o arquivo.\n");
@@ -71,14 +72,14 @@ int salvaCad(char *nome, char *cpf_save, char *doenca ){
     }
 
     while (fscanf(pacientValid, "%s %s %s", temp_name, cpf_check, temp_doenca) != EOF){   
-        printf("%s  %s.", cpf_check, cpf_save);
-        
-        if (cpf_check == cpf_save){   
+        if (cpf_check == cpf_save){
             printf("CPF já utilizado.\n");
             fclose(pacientValid);
             return 0;
         }
     }
+
+        printf("%s\n", doenca);
 
     fprintf(pacientValid, "%s\n%s\n%s\n", nome, cpf_save, doenca);
     fclose(pacientValid);
@@ -88,13 +89,13 @@ int main(){
     char nome[MAX_LEN], temp_nome[MAX_LEN];
     char doenca[MAX_LEN],temp_doenca[MAX_LEN];
     char cpf_s[15], cpf_save[15], cpf_clean[11];
+    char temp[2];
 
-    getPacient(nome, cpf_s,doenca);
+    getPacient(nome, cpf_s, doenca);
 
     strcpy(cpf_save, cpf_s);
     cpf_Separator(cpf_s, cpf_clean);
 
-printf("%s", nome);
     if(!checkName(nome)){
         printf("Erro! Nome inválido.\n");
         return -1;

@@ -1,4 +1,2 @@
-#Ignore any compiler file
 !*.*
 *.exe
-*.txt
