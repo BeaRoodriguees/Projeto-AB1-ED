@@ -112,5 +112,5 @@ int cpf_Autentication(char cpf[]) // Recebe a string cpf após remoção dos tok
         return 0; // Retorna 0 caso o cpf seja inválido.
     }
     printf("Erro! CPF no formato inválido.\n");
-    return 0;
+    return 0; // Retorna 0 caso o formato do cpf seja inválido.
 }
