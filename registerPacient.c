@@ -9,18 +9,18 @@ Não está pegando as doenças
 
 
 //obtem os dados gerados pelo formulario
-int getPacient(char *nome, char *cpf_s, char *doenca){
+int getPacient(char *name, char *cpf, char *doenca){
     FILE *pacientInfos = fopen("data/pacient.txt", "r");
     char temp[2];
     
     if (pacientInfos == NULL){
-        printf("Erro ao abrir o arquivo\n");
+        printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
 
-    fgets(nome, MAX_LEN, pacientInfos);
-    nome[strcspn(nome, "\n")] = 0;
-    fgets(cpf_s, 15, pacientInfos);
+    fgets(name, MAX_LEN, pacientInfos);
+    name[strcspn(name, "\n")] = 0;
+    fgets(cpf, 15, pacientInfos);
     fgets(temp, 2, pacientInfos);
     fgets(doenca, MAX_LEN, pacientInfos);
     doenca[strcspn(doenca, "\n")] = 0;
@@ -30,7 +30,7 @@ int getPacient(char *nome, char *cpf_s, char *doenca){
 }
 
 // funcao que ler o arquivo carrega as strings e faz uma busca "linear" verificando se o cpf consta no .txt
-int validaCad(char *cpf_s){ 
+int validaCad(char *cpf){ 
     char cpf_check [15];
     char temp_name[MAX_LEN];
     char temp_doenca[MAX_LEN];
@@ -39,7 +39,7 @@ int validaCad(char *cpf_s){
     FILE *pacientValid = fopen("data/listPacients.txt", "r");
 
     if (pacientValid == NULL){
-        printf("Erro ao abrir o arquivo\n");
+        printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
 
@@ -48,8 +48,8 @@ int validaCad(char *cpf_s){
         fgets(temp, 2, pacientValid);
         fgets(temp_doenca, MAX_LEN, pacientValid);
 
-        if (strcmp(cpf_check, cpf_s) == 0){
-            printf("%s ", cpf_s);
+        if (strcmp(cpf_check, cpf) == 0){
+            printf("%s ", cpf);
             printf("é CPF já utilizado.\n");
             fclose(pacientValid);
             return 0;
@@ -61,11 +61,7 @@ int validaCad(char *cpf_s){
 } 
 
 //funçao que salva o cadastro
-int salvaCad(char *nome, char *cpf_save, char *doenca){
-    char cpf_check [15];
-    char temp_name[MAX_LEN];
-    char temp_doenca[MAX_LEN];
-
+int salvaCad(char *name, char *cpf_save, char *doenca){
     FILE *pacientValid = fopen("data/listPacients.txt", "ab");
 
     if (pacientValid == NULL){
@@ -73,22 +69,21 @@ int salvaCad(char *nome, char *cpf_save, char *doenca){
         return 0;
     }
 
-    fprintf(pacientValid, "%s\n%s\n%s\n", nome, cpf_save, doenca);
+    fprintf(pacientValid, "%s\n%s\n%s\n", name, cpf_save, doenca);
     fclose(pacientValid);
 }
 
 int main(){
-    char nome[MAX_LEN], temp_nome[MAX_LEN];
-    char doenca[MAX_LEN], temp_doenca[MAX_LEN];
-    char cpf_s[15], cpf_save[15], cpf_clean[11];
-    char temp[2];
+    char name[MAX_LEN];
+    char doenca[MAX_LEN];
+    char cpf[15], cpf_save[15], cpf_clean[11];
 
-    getPacient(nome, cpf_s, doenca);
+    getPacient(name, cpf, doenca);
 
-    strcpy(cpf_save, cpf_s);
-    cpf_Separator(cpf_s, cpf_clean);
+    strcpy(cpf_save, cpf);
+    cpf_Separator(cpf, cpf_clean);
 
-    if(!checkName(nome)){
+    if(!checkName(name)){
         printf("Erro! Nome inválido.\n");
         return -1;
     }
@@ -97,8 +92,8 @@ int main(){
     }
 
     if(validaCad(cpf_save)){
-        salvaCad(nome, cpf_save, doenca);
+        salvaCad(name, cpf_save, doenca);
     }
 
-    return 0;
+    return 1;
 }
