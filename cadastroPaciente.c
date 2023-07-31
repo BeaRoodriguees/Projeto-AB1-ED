@@ -50,7 +50,7 @@ int validaCad(char *cpf_s){
         fgets(temp_doenca,MAX_LEN, pacientValid);
 
         if (strcmp(cpf_check,cpf_s))
-        {   printf("CPF já utilizado");
+        {   printf("CPF já utilizado\n");
             fclose(pacientValid);
             return 0;
         }
@@ -82,7 +82,7 @@ int salvaCad(char *nome, char *cpf_save, char *doenca ){
         printf("%s",cpf_check);
         
         if (cpf_check == cpf_save)
-        {   printf("CPF já utilizado");
+        {   printf("CPF já utilizado\n");
             fclose(pacientValid);
             return 0;
         }
