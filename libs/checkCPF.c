@@ -19,24 +19,68 @@ void cpf_Separator(char src_string[], char dst_string[])
     return;
 }
 
-int cpf_Verifier(long int cpf) //Recebe o cpf no formato long int, necessário uso da função atol para converter a string para long int.
+void num_Separator(int *array, int tam, long int num) //Recebe um array, seu tamano e um número long int para ser transformado em array, onde cada posição do array corresponde a um único dígito do número.
 {
-    int x = 0;
-    
-    while (cpf != 0)
+    for (int i = tam - 1; i > -1; i--)
     {
-        int aux = 0;
-        aux = cpf % 10;
-        x += aux;
-        cpf -= aux;
-        cpf = cpf/10;
+        int aux;
+        aux = (num % 10);
+        array[i] = aux;
+        num = (num - aux)/10;
     }
     
-    int a = x % 10;
-    int b = (x - a)/10;
+    return;
+}
 
-    if (a == b) return 1; //Retorna 1 se o cpf for válido, retorna 0 se for inválido.
+int cpf_Verifier(long int cpf) //Recebe o Cpf no formato long int e retorna 1 caso válido e 0 caso inválido.
+{
+    int *ptr = (int*) calloc(11, sizeof(int)), total = 0, digit = 0;
 
+    if (ptr == NULL)
+    {
+        printf("Erro na alocação.");
+        return 0;
+    }
+
+    num_Separator(ptr, 11, cpf);
+    
+    for (int i = 0, mult = 10; i < 9; i++, mult--)
+    {
+        total += (ptr[i] * mult);
+    }
+    if ((total % 11) >= 2)
+    {
+        digit = 11 - (total % 11);
+    }
+    else
+    {
+        digit = 0;
+    }
+    
+    if (digit == ptr[9])
+    {
+        total = 0;
+        for (int i = 0, mult = 11; i < 10; i++, mult--)
+        {
+            total += (ptr[i] * mult);
+        }
+        if ((total % 11) >= 2)
+        {
+            digit = 11 - (total % 11);
+        }
+        else
+        {
+            digit = 0;
+        }
+        if (digit == ptr[10])
+        {
+            free(ptr);
+            return 1;
+        }
+        free(ptr);
+        return 0;
+    }
+    free(ptr);
     return 0;
 }
 
@@ -68,5 +112,5 @@ int cpf_Autentication(char cpf[]) // Recebe a string cpf após remoção dos tok
         return 0; // Retorna 0 caso o cpf seja inválido.
     }
     printf("Erro! CPF no formato inválido.\n");
-    return 0; // Retorna -1 caso o formato do cpf seja inválido.
+    return 0; // Retorna 0 caso o formato do cpf seja inválido.
 }

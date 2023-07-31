@@ -4,8 +4,7 @@
 #define MAX_LEN 100
 
 /*
-Falta implentar se o usuário já existe
-Não está lendo dps do CPF
+Não está lendo dps do CPF pra Bia
 Falta implementar a leitura dos dias de atendimento
 */
 
@@ -69,7 +68,7 @@ int salveCad(char *name, char *cpf_save, char *specialties, int *serviceDays){
         return 0;
     }
 
-    fprintf(pacientValid, "%s\n%s\n%s\n", name, cpf_save, specialties);
+    fprintf(pacientValid, "%s\n%s\n%s\n\n", name, cpf_save, specialties);
     fclose(pacientValid);
 }
 
