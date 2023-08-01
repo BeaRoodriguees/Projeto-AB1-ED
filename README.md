@@ -39,7 +39,7 @@ Repositório para os Projetos para AB1 da disciplina Estrutura de Dados do Curso
 (tabelas no Moodle)
 - Procedimentos Odontológicos;
 - Remarcar a consulta que caiu em um feriado para o **segundo dia livre antes** do feriado;
-- Você pode oferecer a consulta e o procedimento com o mesmo médico;
+- Você pode oferecer a consulta e o procedimento com o **mesmo médico**;
 
 # Cadastro de Consultas e Procedimentos
 - Especialidade;
