@@ -3,11 +3,6 @@
 #include "libs/checkCPF.c"
 #define MAX_LEN 100
 
-/* 
-Não está pegando as doenças
-*/
-
-
 //obtem os dados gerados pelo formulario
 int getPacient(char *name, char *cpf, char *doenca){
     FILE *pacientInfos = fopen("data/pacient.txt", "r");
@@ -73,7 +68,7 @@ int salvaCad(char *name, char *cpf_save, char *doenca){
     fclose(pacientValid);
 }
 
-int main(){
+int registerPacient(){
     char name[MAX_LEN];
     char doenca[MAX_LEN];
     char cpf[15], cpf_save[15], cpf_clean[11];
@@ -87,6 +82,7 @@ int main(){
         printf("Erro! Nome inválido.\n");
         return -1;
     }
+   
     if(!cpf_Autentication(cpf_clean)){
         return -1;
     }

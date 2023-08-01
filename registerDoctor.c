@@ -72,7 +72,7 @@ int salveCad(char *name, char *cpf_save, char *specialties, int *serviceDays){
     fclose(pacientValid);
 }
 
-int main(){
+int registerDoctor(){
     char name[MAX_LEN];
     char cpf[15], cpf_save[15], cpf_clean[12], temp[2];
     char specialties[MAX_LEN];
