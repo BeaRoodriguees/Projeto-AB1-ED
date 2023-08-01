@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEBUG if(1) printf
+#define DEBUG if(0) printf
 
 typedef struct tm data;
 
