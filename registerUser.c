@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "libs/checkName.c"
 #include "libs/checkCPF.c"
 #define MAX_LEN 100
@@ -91,17 +92,19 @@ int registerUser(int view){
         return -1;
     }
 
+    printf("view %d\n", view);
     if (view == 1){
-        if(validReg(cpf_save, "data/listPacient.txt")){
+        int res = validReg(cpf_save, "data/listPacient.txt");
+        printf("res %d", res);
+        if(res){
             salveReg(name, cpf_save, infos, "data/listPacient.txt");
             return 1;   
         }
         else{
-            printf("invalido\n");
             return -1;
         }
     }
-    if (view == 2){
+    else if (view == 2){
         if(validReg(cpf_save, "data/listDoctor.txt")){
             salveReg(name, cpf_save, infos, "data/listDoctor.txt");
             return 1;    

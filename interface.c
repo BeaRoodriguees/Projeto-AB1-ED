@@ -102,7 +102,7 @@ int main(){
             while(1){
                 record(view, c);
                 int reg = registerPacient();
-                printf("%d", reg);
+                printf("reg %d", reg);
                 if(reg == -1){
                     printf("\nCadastro inválido. Tente novamente.\n");
                     c++;
