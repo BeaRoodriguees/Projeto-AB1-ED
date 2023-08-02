@@ -6,7 +6,7 @@
 //1º parâmetro é a string a ser separada, 2º parâmetro é a string que vai receber a primeira string após a remoção dos tokens.
 void cpf_Separator(char src_string[], char dst_string[])
 {
-    memset(dst_string,0,strlen(dst_string)); //limpar a string pra o proximo uso
+    memset(dst_string, 0, strlen(dst_string)); //limpar a string pra o proximo uso
     char t[] = ".- \n"; //tokens a serem removidos da primeira string.
     char *portion = strtok(src_string, t);
 
@@ -109,9 +109,9 @@ int cpf_Autentication(char cpf[]) // Recebe a string cpf após remoção dos tok
         {
             return 1; // Retorna 1 caso o cpf seja válido.
         }
-        printf("Erro! CPF inválido\n");
+        printf("\nErro! CPF inválido\n");
         return 0; // Retorna 0 caso o cpf seja inválido.
     }
-    printf("Erro! CPF no formato inválido.\n");
+    printf("\nErro! CPF no formato inválido.\n");
     return 0; // Retorna 0 caso o formato do cpf seja inválido.
 }
