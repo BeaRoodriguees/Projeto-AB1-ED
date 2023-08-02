@@ -2,24 +2,31 @@
 #include <string.h>
 #include <unistd.h>
 #include "registerUser.c"
+#include "libs/searchUser.c"
 
 #define MAX_LEN 100
 #define LIMPAR "\e[H\e[2J"
 
-int login(){
+int login(int view, int c){
     char cpf[15];
     printf(LIMPAR);
     printf("\t\tMarcação de Consulta -- Login\n\n");
     printf("Insira o seu CPF: ");
+    if (c == 0) getchar();
     fgets(cpf, 15, stdin);
 
-    /* procurá-lo na lista || autenticar
-    se autenticado:
-        Madar para tela de consultas
-    se não:
-        Tente outra veeez
-    */
+    if (view == 1){
+        if (searchUser(cpf, "data/listPacients.txt")){
+            printf("sucesso. P");
+            return 1;
+        }
+        else{
+            printf("fail\n");
+            return 0;
+        }
+    }
 }
+
 
 // Cadastra o User num .txt
 int record(int view, int c){
@@ -95,25 +102,25 @@ int main(){
             return 0;
 
         case 1: // ajeitar
-            login();
+            login(view, c);
             break;
 
         case 2:
-            while(1){
-                record(view, c);
-                if(registerUser(view) == -1){
-                    printf("\nCadastro inválido. Tente novamente.\n");
-                    c++;
+            while(1){    
+                if(!login(view, c)){
+                    printf("\nFalha na autenticação. Tente novamente.\n");
+                    c = 1;
                     sleep(4);
                     continue;
                 }
                 break;
             }
-            
-            printf("\nCadastro realizado com sucesso! Redirecionando para tela de login...\n");
+            c = 0;
+            printf("Autenticação realizado com sucesso! Redirecionando para tela de marcação de consultas...\n");
             sleep(4);
-            login();
+            //marcarConsulta
             break;
+
         
         default:
             printf("Escolha inválida. Por favor, tente novamente.\n");
