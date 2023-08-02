@@ -47,6 +47,7 @@ int validaCad(char *cpf){
             printf("%s ", cpf);
             printf("é CPF já utilizado.\n");
             fclose(pacientValid);
+
             return 0;
         }
     }
@@ -88,8 +89,10 @@ int registerPacient(){
     }
 
     if(validaCad(cpf_save)){
+        printf("Quack!\n");
         salvaCad(name, cpf_save, doenca);
+        return 1;
     }
 
-    return 1;
+    return -1;
 }
