@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 #include <stdlib.h>
 #include <ctype.h> //Necessáro para usar as funções desta biblioteca.
 
 //1º parâmetro é a string a ser separada, 2º parâmetro é a string que vai receber a primeira string após a remoção dos tokens.
 void cpf_Separator(char src_string[], char dst_string[])
 {
+    memset(dst_string,0,strlen(dst_string)); //limpar a string pra o proximo uso
     char t[] = ".- \n"; //tokens a serem removidos da primeira string.
     char *portion = strtok(src_string, t);
 
@@ -101,6 +101,7 @@ int digit_Verifier(char cpf[]) //Verifica se todos os elementos da string cpf s�
 
 int cpf_Autentication(char cpf[]) // Recebe a string cpf após remoção dos tokens e chama as outras funções para autenticar o cpf.
 {
+    
     if (digit_Verifier(cpf))
     {
         long int cpfnum = atol(cpf);

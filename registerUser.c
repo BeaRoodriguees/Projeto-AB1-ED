@@ -52,7 +52,6 @@ int validReg(char *cpf, const char *fileUser){
             return 0;
         }
     }
-
     fclose(userValid);
     return 1;
 } 
@@ -92,13 +91,22 @@ int registerUser(int view){
         return -1;
     }
 
-    if (view == 1)
-        if(validReg(cpf_save, "data/listPacient.txt"))
+    if (view == 1){
+        if(validReg(cpf_save, "data/listPacient.txt")){
             salveReg(name, cpf_save, infos, "data/listPacient.txt");
-    if (view == 2)
-         if(validReg(cpf_save, "data/listDoctor.txt"))
+            return 1;   
+        }
+        else{
+            printf("invalido\n");
+            return -1;
+        }
+    }
+    if (view == 2){
+        if(validReg(cpf_save, "data/listDoctor.txt")){
             salveReg(name, cpf_save, infos, "data/listDoctor.txt");
-    
-
-    return 1;
+            return 1;    
+        }
+        else
+            return -1;
+    }
 }

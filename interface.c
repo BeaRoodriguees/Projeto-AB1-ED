@@ -22,7 +22,7 @@ int login(){
 }
 
 // Cadastra o User num .txt
-int record(int view){
+int record(int view, int c){
     char name[MAX_LEN], cpf[15], info[MAX_LEN], temp[2];
     FILE *createUser;
 
@@ -31,7 +31,7 @@ int record(int view){
     printf("Insira as informações abaixo:\n\n");
     
     printf("Nome Completo: ");
-    getchar();
+    if (c == 0) getchar();
     fgets(name, MAX_LEN, stdin);
     name[strcspn(name, "\n")] = 0;
 
@@ -66,7 +66,7 @@ int record(int view){
 }
 
 int main(){
-    int view, choice;
+    int view, choice, c = 0;
 
     //Tela Inicial Geral -- Escolher o cargo
     printf(LIMPAR);
@@ -100,9 +100,12 @@ int main(){
 
         case 2:
             while(1){
-                record(view);
-                if(registerPacient() == -1){
+                record(view, c);
+                int reg = registerPacient();
+                printf("%d", reg);
+                if(reg == -1){
                     printf("\nCadastro inválido. Tente novamente.\n");
+                    c++;
                     sleep(4);
                     continue;
                 }
