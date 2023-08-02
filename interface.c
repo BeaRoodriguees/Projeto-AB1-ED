@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "registerPacient.c"
+#include "registerUser.c"
 
 #define MAX_LEN 100
 #define LIMPAR "\e[H\e[2J"
@@ -17,7 +17,7 @@ int login(){
     se autenticado:
         Madar para tela de consultas
     se não:
-        Tente outra veeez!
+        Tente outra veeez
     */
 }
 
@@ -101,9 +101,7 @@ int main(){
         case 2:
             while(1){
                 record(view, c);
-                int reg = registerPacient();
-                printf("reg %d", reg);
-                if(reg == -1){
+                if(registerUser(view) == -1){
                     printf("\nCadastro inválido. Tente novamente.\n");
                     c++;
                     sleep(4);

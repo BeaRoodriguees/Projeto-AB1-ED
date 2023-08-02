@@ -12,6 +12,7 @@ int getUser(char *name, char *cpf, char *infos, const char *fileUser){
     char temp[2];
     
     if (userInfos == NULL){
+        printf("linha 15\n");
         printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
@@ -37,6 +38,7 @@ int validReg(char *cpf, const char *fileUser){
     FILE *userValid = fopen(fileUser, "r");
 
     if (userValid == NULL){
+        printf("Linha 41\n");
         printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
@@ -62,6 +64,7 @@ int salveReg(char *name, char *cpf_save, char *infos, const char *userFile){
     FILE *userValid = fopen(userFile, "ab");
 
     if (userValid == NULL){
+        printf("Linha 67\n");
         printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
@@ -92,12 +95,9 @@ int registerUser(int view){
         return -1;
     }
 
-    printf("view %d\n", view);
     if (view == 1){
-        int res = validReg(cpf_save, "data/listPacient.txt");
-        printf("res %d", res);
-        if(res){
-            salveReg(name, cpf_save, infos, "data/listPacient.txt");
+        if(validReg(cpf_save, "data/listPacients.txt")){
+            salveReg(name, cpf_save, infos, "data/listPacients.txt");
             return 1;   
         }
         else{
@@ -105,8 +105,8 @@ int registerUser(int view){
         }
     }
     else if (view == 2){
-        if(validReg(cpf_save, "data/listDoctor.txt")){
-            salveReg(name, cpf_save, infos, "data/listDoctor.txt");
+        if(validReg(cpf_save, "data/listDoctors.txt")){
+            salveReg(name, cpf_save, infos, "data/listDoctors.txt");
             return 1;    
         }
         else
