@@ -17,7 +17,7 @@ int login(){
     se autenticado:
         Madar para tela de consultas
     se não:
-        Tente outra veeez!
+        Tente outra veeez
     */
 }
 
