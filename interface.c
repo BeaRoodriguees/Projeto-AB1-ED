@@ -3,10 +3,17 @@
 #include <unistd.h>
 #include "registerUser.c"
 #include "libs/searchUser.c"
-
 #define MAX_LEN 100
 #define LIMPAR "\e[H\e[2J"
 
+/*
+    Ver sobre os admins
+    Marcar a consulta
+    As telas do Médico
+*/
+
+
+// Autentica o usuario procurando seu CPF no txt
 int login(int view, int c){
     char cpf[15];
     printf(LIMPAR);
@@ -17,14 +24,23 @@ int login(int view, int c){
 
     if (view == 1){
         if (searchUser(cpf, "data/listPacients.txt")){
-            printf("sucesso. P");
+            // Marcar a consulta
             return 1;
         }
         else{
-            printf("fail\n");
             return 0;
         }
     }
+    else if (view == 2){
+        if (searchUser(cpf, "data/listDoctors.txt")){
+            // Prox tela
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+
 }
 
 
@@ -84,7 +100,7 @@ int main(){
     scanf("%d", &view);
     
     if (view < 1 || view > 3){
-        printf("Valor do Cargo insiro é inválido.");
+        printf("O cargo insiro é inválido.");
         sleep(4);
         //chamar o Tela Inicial Geral
     }
@@ -102,13 +118,9 @@ int main(){
             return 0;
 
         case 1: // ajeitar
-            login(view, c);
-            break;
-
-        case 2:
             while(1){    
                 if(!login(view, c)){
-                    printf("\nFalha na autenticação. Tente novamente.\n");
+                    printf("\nFalha no cadastro. Tente novamente.\n");
                     c = 1;
                     sleep(4);
                     continue;
@@ -116,12 +128,29 @@ int main(){
                 break;
             }
             c = 0;
-            printf("Autenticação realizado com sucesso! Redirecionando para tela de marcação de consultas...\n");
+            printf("Cadastro realizado com sucesso! Redirecionando para tela de autenticação...\n");
             sleep(4);
             //marcarConsulta
             break;
 
-        
+
+        case 2:
+            while(1){    
+                record(view, c);
+                if (registerUser(view) == -1){
+                    printf("\nFalha no cadastro. Tente novamente.\n");
+                    c = 1;
+                    sleep(4);
+                    continue;
+                }
+                break;
+            }
+            c = 0;
+            printf("Cadastro realizado com sucesso! Redirecionando para tela de autenticação...\n");
+            sleep(4);
+            //chamar login -- Cuidar do loop de erro
+            break;
+
         default:
             printf("Escolha inválida. Por favor, tente novamente.\n");
             // Chamar o Tela Inicial

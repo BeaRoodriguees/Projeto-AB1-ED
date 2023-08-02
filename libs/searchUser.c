@@ -19,10 +19,8 @@ int searchUser(char *cpf, const char *fileUser){
         fgets(cpf_check, 15, userValid);
         fgets(temp, 2, userValid);
         fgets(temp_infos, MAX_LEN, userValid);
-        printf("\nname: %s cpf: %s temp:%s infos: %s\n", temp_name, cpf_check, temp_infos, temp);
 
         if (strcmp(cpf_check, cpf) == 0){
-            printf("Acheii\n");
             fclose(userValid);
             return 1;
         }
