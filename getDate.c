@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEBUG if(1) printf
+#define DEBUG if(0) printf
 
 typedef struct tm data;
 
@@ -126,7 +126,6 @@ int main(){
 
     data consulta;
     char consultIn[15];
-
     
     while(1){
         printf("Informe a data desejada para a consulta (DD/MM/AAAA): ");

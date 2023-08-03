@@ -26,7 +26,6 @@ int isSpace(char c){
  *
  * @param name strig with the name
  * @return 0 - invalid | 1 - valid
- *
  */
 int checkName(char name[]){
     int length = strlen(name) - 1; 
