@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include "libs/feriado.c"
 
 #define DEBUG if(0) printf
 
@@ -123,20 +124,20 @@ data atualData (data atual){
 
 int main(){
     data atual = atualData(atual);
-
     data consulta;
     char consultIn[15];
     
-    while(1){
         printf("Informe a data desejada para a consulta (DD/MM/AAAA): ");
         scanf("%s", consultIn);
 
-        if(validDate(consultIn, &consulta, atual)){
-            break;
+        if (validDate(consultIn, &consulta, atual)){
+            int diaSemana = verificaData(consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+            if (diaSemana != 8 && diaSemana != 7){
+                printf("Data de Hoje: %d/%d/%d\n", atual.tm_mday, atual.tm_mon, atual.tm_year);
+                printf("Data da Consulta: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+                printf("Dia da Semana: %d\n", diaSemana);
+           }
         }
-        printf("Dada inválida. ");
-    }
+        return -1;
 
-    printf("Data de Hoje: %d/%d/%d\n", atual.tm_mday, atual.tm_mon, atual.tm_year);
-    printf("Data da Consulta: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
 }

@@ -121,12 +121,9 @@ int isFeriado(int dia, int mes, int ano, const char *nomeArquivo)
     return 0;
 }
 
-int verificaData()
+int verificaData(int dia, int mes, int ano)
 {
-    int dia, mes, ano, dias;
-    printf("Digite o dia, mês e ano (no formato DD MM AAAA): ");
-    scanf("%d %d %d", &dia, &mes, &ano);
-    dias = diaDoAno(dia, mes, ano);
+    int dias = diaDoAno(dia, mes, ano);
 
     if (isFeriado(dia, mes, ano, "data/feriados.txt"))
     {
