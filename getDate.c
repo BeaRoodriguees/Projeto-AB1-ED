@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 #include "libs/feriado.c"
 
 typedef struct tm data;
@@ -130,7 +131,7 @@ int appointment(){
     data consulta;
     char consultIn[15];
     
-    printf("Informe a data desejada para a consulta (DD/MM/AAAA): ");
+    printf("\nInforme a data desejada para a consulta (DD/MM/AAAA): ");
     scanf("%s", consultIn);
 
     sepData(consultIn, &consulta);
@@ -139,22 +140,37 @@ int appointment(){
         int diaSemana = verificaData(consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
 
         if (diaSemana == 7){
-            printf("Não há atendimento aos domingos.\n");
-            return -1;
+            printf("Não há atendimento aos domingos. Escolha outro dia.\n");
+            sleep(2);
+            printf("\e[H\e[2J");
+            return appointment();
         }
         else if (diaSemana == 8){
+            int choice = 0;
             data preFeriado = opcConsulta(consulta);
 
             printf("O dia escolhido é feriado.\n[1] - Podemos marcar para %d/%d/%d\n[2] - Escolher outro dia\n", preFeriado.tm_mday, preFeriado.tm_mon, preFeriado.tm_year);
+            printf("Escolha: ");
+            scanf("%d", &choice);
+            
+            if (choice == 1){
+                // Marcar a Consulta
+            }
+            else if (choice == 2){
+                return appointment();
+            }
         }
         else{
             printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
             return 1;
         }
     }
-    else
-        printf("A data inserida é inválida.\n");
+    else{
+        printf("A data inserida é inválida. Tente novamente\n");
+        sleep(4);
+        printf("\e[H\e[2J");
+        return appointment();
+    }
 
     return -1;
-
 }
