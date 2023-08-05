@@ -4,8 +4,6 @@
 #include <time.h>
 #include "libs/feriado.c"
 
-#define DEBUG if(0) printf
-
 typedef struct tm data;
 
 int anoBi (int ano){
@@ -53,48 +51,34 @@ int diaMes (data tempo){
     }
 }
 
-int validDate (char *in, data *tempo, data hoje){
-    sepData(in, tempo);
-    data aux = *tempo;
-    int maxDias = diaMes(aux);
+int validDate (data *tempo, data hoje){
+    int maxDias = diaMes(*tempo);
 
     if (maxDias == -1)
         return 0;
     else {
         if (tempo->tm_mday < 1 || tempo->tm_mday > maxDias){
-            DEBUG ("a\n");
             return 0;
         }
 
         // Esse ano
         if (tempo->tm_year == hoje.tm_year ){
-            DEBUG ("entrou ano =\n");
-
             if (tempo->tm_mon == hoje.tm_mon){
-                DEBUG ("entrou mes ==\n");
-
                 if (tempo->tm_mday >= hoje.tm_mday){
                     return 1;
                 }
          
                 return 0;
             }
-
             else if (tempo->tm_mon > hoje.tm_mon){
-                DEBUG ("entrou mes =!\n");
-
                 return 1;
             }
              
             return 0;
         }
-
+        // Prox ano
         if (tempo->tm_year == hoje.tm_year + 1){
-            DEBUG ("entrou ano = +1\n");
-
             if (tempo->tm_mon == hoje.tm_mon){
-                DEBUG ("entrou mes == +1\n");
-
                 if (tempo->tm_mday < hoje.tm_mday){
                     return 1;
                 }
@@ -103,41 +87,74 @@ int validDate (char *in, data *tempo, data hoje){
             }
 
             else if (tempo->tm_mon < hoje.tm_mon){
-                DEBUG ("entrou mes =! +1\n");
-
                 return 1;
             }
-             
             return 0;
         }
         
     }
 }
 
-data atualData (data atual){
+data atualData (){
     time_t sec = time(NULL);
-    atual = *localtime(&sec);
+    data atual = *localtime(&sec);
     atual.tm_mon += 1, atual.tm_year += 1900;
 
     return atual;
 }
 
-int main(){
-    data atual = atualData(atual);
+data opcConsulta(data consulta){
+    data dia;
+    dia.tm_mday = consulta.tm_mday;
+    dia.tm_mon = consulta.tm_mon;
+    dia.tm_year =consulta.tm_year;
+    
+    int result = 0;
+
+    while (result == 0 || result > 6){
+        dia.tm_mday -= 2;
+        
+        if (dia.tm_mday <= 0){
+            dia.tm_mon -= 1;
+            dia.tm_mday = diaMes(dia) + dia.tm_mday;
+        }
+
+        result = verificaData(dia.tm_mday, dia.tm_mon, dia.tm_year);
+    }
+    
+    return dia;
+}
+
+int appointment(){
+    data atual = atualData();
     data consulta;
     char consultIn[15];
     
-        printf("Informe a data desejada para a consulta (DD/MM/AAAA): ");
-        scanf("%s", consultIn);
+    printf("Informe a data desejada para a consulta (DD/MM/AAAA): ");
+    scanf("%s", consultIn);
 
-        if (validDate(consultIn, &consulta, atual)){
-            int diaSemana = verificaData(consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
-            if (diaSemana != 8 && diaSemana != 7){
-                printf("Data de Hoje: %d/%d/%d\n", atual.tm_mday, atual.tm_mon, atual.tm_year);
-                printf("Data da Consulta: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
-                printf("Dia da Semana: %d\n", diaSemana);
-           }
+    sepData(consultIn, &consulta);
+
+    if (validDate(&consulta, atual)){
+        int diaSemana = verificaData(consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+
+        if (diaSemana == 7){
+            printf("Não há atendimento aos domingos.\n");
+            return -1;
         }
-        return -1;
+        else if (diaSemana == 8){
+            data preFeriado = opcConsulta(consulta);
+
+            printf("O dia escolhido é feriado.\n[1] - Podemos marcar para %d/%d/%d\n[2] - Escolher outro dia\n", preFeriado.tm_mday, preFeriado.tm_mon, preFeriado.tm_year);
+        }
+        else{
+            printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+            return 1;
+        }
+    }
+    else
+        printf("A data inserida é inválida.\n");
+
+    return -1;
 
 }

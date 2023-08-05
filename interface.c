@@ -3,49 +3,76 @@
 #include <unistd.h>
 #include "registerUser.c"
 #include "libs/searchUser.c"
+#include "getDate.c"
 #define MAX_LEN 100
 #define LIMPAR "\e[H\e[2J"
 
-/*
+/* FALTA:
     Ver sobre os admins
     Marcar a consulta
+        Escolher por médico ou por procedimento
     As telas do Médico
 */
 
+void preAppointment(int *option){
+    int temp;
+    printf(LIMPAR);
+    printf("\t\tMarcação de Consulta\n\n");
+    printf("Você deseja pesquisar por:\n");
+    printf("[1] - Procedimento\n[2] - Médico\n\n");
+    printf("Escolha: ");
+    scanf("%d", &temp);
+
+    if (temp != 1 && temp != 2){
+        printf("A opção escolhida é inválida. Tente novamente.\n");
+        sleep(2);
+        return preAppointment(option);
+    }
+
+    (*option) = temp;
+}
 
 // Autentica o usuario procurando seu CPF no txt
-int login(int view, int c){
+int login(int view, int flag){
     char cpf[15];
     printf(LIMPAR);
     printf("\t\tMarcação de Consulta -- Login\n\n");
     printf("Insira o seu CPF: ");
-    if (c == 0) getchar();
+    if (flag == 0) getchar();
     fgets(cpf, 15, stdin);
 
     if (view == 1){
-        if (searchUser(cpf, "data/listPacients.txt")){
-            // Marcar a consulta
+        if (searchUser(cpf, "data/listPacients.txt"))
             return 1;
-        }
-        else{
-            return 0;
-        }
     }
     else if (view == 2){
-        if (searchUser(cpf, "data/listDoctors.txt")){
-            // Prox tela
+        if (searchUser(cpf, "data/listDoctors.txt"))
             return 1;
-        }
-        else{
-            return 0;
-        }
     }
-
+    return 0;
 }
 
+int preLogin(int view){
+    int flag = 0;
+
+    while(1){
+        if(!login(view, flag)){
+            printf("\nFalha na autenticação. Tente novamente.\n");
+            flag = 1;
+            sleep(4);
+            continue;
+        }
+        break;
+    }
+    flag = 0;
+    printf("Autenticação realizada com sucesso! Redirecionando...\n");
+    sleep(2);
+    return 1;
+    //prox tela
+}
 
 // Cadastra o User num .txt
-int record(int view, int c){
+int record(int view, int flag){
     char name[MAX_LEN], cpf[15], info[MAX_LEN], temp[2];
     FILE *createUser;
 
@@ -54,7 +81,7 @@ int record(int view, int c){
     printf("Insira as informações abaixo:\n\n");
     
     printf("Nome Completo: ");
-    if (c == 0) getchar();
+    if (flag == 0) getchar();
     fgets(name, MAX_LEN, stdin);
     name[strcspn(name, "\n")] = 0;
 
@@ -88,72 +115,79 @@ int record(int view, int c){
     return 1;
 }
 
-int main(){
-    int view, choice, c = 0;
+//Tela Inicial Geral -- Escolher o cargo
+void roleScreen(int *view){
+    int temp;
 
-    //Tela Inicial Geral -- Escolher o cargo
     printf(LIMPAR);
     printf("\t\tMarcação de Consulta -- Escolha de Cargo\n\n");
     printf("Escolha uma das opções abaixo:\n\n");
     printf("[1] - Paciente\n[2] - Médico\n[3] - Admin\n");
     printf("Escolha: ");
-    scanf("%d", &view);
+    scanf("%d", &temp);
     
-    if (view < 1 || view > 3){
-        printf("O cargo insiro é inválido.");
-        sleep(4);
-        //chamar o Tela Inicial Geral
+    if (temp < 1 || temp > 3){
+        printf("O cargo insiro é inválido. Tente novamente.\n");
+        sleep(2);
+        return roleScreen(view);
     }
+    (*view) = temp;
+}
 
-   //Tela Incial
+//Tela Incial
+void homeScreen(int *choice){
+    int temp;
+
     printf(LIMPAR);
     printf("\t\tMarcação de Consulta -- Tela Inicial\n\n");
     printf("Escolha uma das opções abaixo:\n\n");
     printf("[1] - Entrar\n[2] - Cadastrar\n[0] - Sair\n");
     printf("Escolha: ");
-    scanf("%d", &choice);
+    scanf("%d", &temp);
+
+    if (temp < 1 || temp > 3){
+        printf("A opção escolhida é inválida. Tente novamente.\n");
+        sleep(2);
+        return roleScreen(choice);
+    }
+
+    (*choice) = temp;
+}
+
+int main(){
+    int view, choice, option;
+
+    roleScreen(&view);
+    homeScreen(&choice);   
 
     switch (choice){
         case 0:
             return 0;
-
-        case 1: // ajeitar
-            while(1){    
-                if(!login(view, c)){
-                    printf("\nFalha no cadastro. Tente novamente.\n");
-                    c = 1;
-                    sleep(4);
-                    continue;
-                }
-                break;
-            }
-            c = 0;
-            printf("Cadastro realizado com sucesso! Redirecionando para tela de autenticação...\n");
-            sleep(4);
-            //marcarConsulta
+        case 1:
+            preLogin(view);
             break;
-
-
         case 2:
+            int flag = 0;
             while(1){    
-                record(view, c);
+                record(view, flag);
                 if (registerUser(view) == -1){
                     printf("\nFalha no cadastro. Tente novamente.\n");
-                    c = 1;
+                    flag = 1;
                     sleep(4);
                     continue;
                 }
                 break;
             }
-            c = 0;
+            flag = 0;
             printf("Cadastro realizado com sucesso! Redirecionando para tela de autenticação...\n");
             sleep(4);
-            //chamar login -- Cuidar do loop de erro
+            preLogin(view);
             break;
+    }
 
-        default:
-            printf("Escolha inválida. Por favor, tente novamente.\n");
-            // Chamar o Tela Inicial
-            break;
+    // Marcação da Consulta
+    if (view == 1){
+        preAppointment(&option);
+        appointment();
     }
 }
