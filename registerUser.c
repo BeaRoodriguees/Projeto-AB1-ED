@@ -6,6 +6,23 @@
 
 //Falta pegar os dias de atendimento do médico (outra função??)
 
+void getServiceDay(){
+    FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
+    char *days, *t;
+    printf("Informe os dias de atendimento (1 - Seg, ..., 6 - Sab): ");
+    fgets(days, 10, stdin);
+
+    t = strtok(days,", ");
+
+    while (t != NULL)
+    {
+        if (atoi(t) > 0 && atoi(t) < 7) fprintf(doctorInfos, "%d ", atoi(t));
+        t = strtok(NULL, ", ");
+    }
+    printf("\n");
+    fclose(doctorInfos);
+}
+
 //obtem os dados gerados pelo formulario
 int getUser(char *name, char *cpf, char *infos, const char *fileUser){
     FILE *userInfos = fopen(fileUser, "r");
@@ -97,16 +114,14 @@ int registerUser(int view){
             salveReg(name, cpf_save, infos, "data/listPacients.txt");
             return 1;   
         }
-        else{
-            return -1;
-        }
     }
     else if (view == 2){
         if(validReg(cpf_save, "data/listDoctors.txt")){
             salveReg(name, cpf_save, infos, "data/listDoctors.txt");
+            getServiceDay();
             return 1;    
         }
-        else
-            return -1;
     }
+    
+    return -1;
 }

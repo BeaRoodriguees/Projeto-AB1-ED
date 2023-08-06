@@ -14,6 +14,19 @@
     As telas do Médico
 */
 
+void doctorScreen(int *option){
+    int temp;
+
+    printf(LIMPAR);
+    printf("\t\tMarcação de Consulta -- Menu do Médico\n\n");
+    printf("Escolha uma das opções abaixo:\n\n");
+    printf("[1] - Lista de Paciente\n[2] - Consultas do Dia\n[3] - Editar o Cadastro\n[0] - Sair\n");
+    printf("Escolha: ");
+    scanf("%d", &temp);
+
+    (*option) = temp;
+}
+
 void preAppointment(int *option){
     int temp;
     printf(LIMPAR);
@@ -188,6 +201,31 @@ int main(){
     // Marcação da Consulta
     if (view == 1){
         preAppointment(&option);
+
+        if (option == 1){ // por Procedimento 
+            printf("Procedimento: ");
+
+        } 
+
+        else if (option == 2){ // por Médico
+            printf("Médico: ");
+        }
+
         appointment();
     }
+    else if (view == 2){
+        doctorScreen(&option);
+
+        if (option == 1){
+
+        }
+        else if (option == 2){
+
+        }
+        else if (option == 3){
+
+        }
+    }
+
+    return 0;
 }
