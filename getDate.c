@@ -139,7 +139,7 @@ int appointment(){
     if (validDate(&consulta, atual)){
         int diaSemana = verificaData(consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
 
-        if (diaSemana == 7){
+        if (diaSemana == 1){
             printf("Não há atendimento aos domingos. Escolha outro dia.\n");
             sleep(2);
             printf("\e[H\e[2J");
