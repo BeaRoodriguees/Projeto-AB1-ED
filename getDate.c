@@ -108,15 +108,20 @@ data opcConsulta(data consulta){
     data dia;
     dia.tm_mday = consulta.tm_mday;
     dia.tm_mon = consulta.tm_mon;
-    dia.tm_year =consulta.tm_year;
+    dia.tm_year = consulta.tm_year;
     
     int result = 0;
 
-    while (result == 0 || result > 6){
+    while (result <= 1 || result > 6){
         dia.tm_mday -= 2;
         
         if (dia.tm_mday <= 0){
             dia.tm_mon -= 1;
+
+            if(consulta.tm_mon == 1){
+                dia.tm_mon = 12;
+            }
+
             dia.tm_mday = diaMes(dia) + dia.tm_mday;
         }
 
@@ -160,7 +165,7 @@ int appointment(){
             
             if (choice == 1){
                 // Marcar a Consulta
-                printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+                printf("A consulta foi marcada para o dia: %d/%d/%d\n", preFeriado.tm_mday, preFeriado.tm_mon, preFeriado.tm_year);
                 return 1;
             }
             else if (choice == 2){
@@ -173,15 +178,12 @@ int appointment(){
             return 1;
         }
     }
-    else if(checkServiceDay()){
-        printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
-        return 1;
+    else{
+        printf("A data inserida é inválida. Tente novamente\n");
+        sleep(4);
+        printf("\e[H\e[2J");
+        return appointment();
     }
-
-    printf("A data inserida é inválida. Tente novamente\n");
-    sleep(4);
-    printf("\e[H\e[2J");
-    return appointment();
 
     return -1;
 }

@@ -52,4 +52,5 @@ Repositório para os Projetos para AB1 da disciplina Estrutura de Dados do Curso
 ## FALTA:
 getDate:
      - checkServiceDay();
+     - Ver médicos que ofertam o procedimento
      - 
