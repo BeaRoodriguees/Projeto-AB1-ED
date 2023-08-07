@@ -126,6 +126,11 @@ data opcConsulta(data consulta){
     return dia;
 }
 
+//Saber quem é o médico 
+int checkServiceDay(){
+
+}
+
 int appointment(){
     data atual = atualData();
     data consulta;
@@ -160,7 +165,8 @@ int appointment(){
                 return appointment();
             }
         }
-        else{
+        else if(checkServiceDay()){
+            // Marcar a Consulta
             printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
             return 1;
         }

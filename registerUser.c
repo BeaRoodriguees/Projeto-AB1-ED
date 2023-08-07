@@ -6,10 +6,28 @@
 
 //Falta pegar os dias de atendimento do médico (outra função??)
 
+void getProcedure(){
+    FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
+    char *days, *t;
+    printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
+    fgets(days, 10, stdin);
+
+    t = strtok(days,", ");
+
+    while (t != NULL)
+    {
+        if (atoi(t) > 0 && atoi(t) < 7) fprintf(doctorInfos, "%d ", atoi(t));
+        t = strtok(NULL, ", ");
+    }
+    printf("\n");
+    fclose(doctorInfos);
+}
+}
+
 void getServiceDay(){
     FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
     char *days, *t;
-    printf("Informe os dias de atendimento (1 - Seg, ..., 6 - Sab): ");
+    printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
     fgets(days, 10, stdin);
 
     t = strtok(days,", ");

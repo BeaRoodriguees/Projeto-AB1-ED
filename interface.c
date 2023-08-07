@@ -14,6 +14,7 @@
     As telas do Médico
 */
 
+// Telas do Médico
 void doctorScreen(int *option){
     int temp;
 
@@ -23,24 +24,6 @@ void doctorScreen(int *option){
     printf("[1] - Lista de Paciente\n[2] - Consultas do Dia\n[3] - Editar o Cadastro\n[0] - Sair\n");
     printf("Escolha: ");
     scanf("%d", &temp);
-
-    (*option) = temp;
-}
-
-void preAppointment(int *option){
-    int temp;
-    printf(LIMPAR);
-    printf("\t\tMarcação de Consulta\n\n");
-    printf("Você deseja pesquisar por:\n");
-    printf("[1] - Procedimento\n[2] - Médico\n\n");
-    printf("Escolha: ");
-    scanf("%d", &temp);
-
-    if (temp != 1 && temp != 2){
-        printf("A opção escolhida é inválida. Tente novamente.\n");
-        sleep(2);
-        return preAppointment(option);
-    }
 
     (*option) = temp;
 }
@@ -110,9 +93,10 @@ int record(int view, int flag){
             createUser = fopen("data/pacient.txt", "w");
             break;
         case 2:
-            printf("Especialidade / Procedimentos: ");
-            fgets(info, MAX_LEN, stdin);
-            info[strcspn(info, "\n")] = 0;
+            printf("Opções de Procedimentos:\n\n");
+            printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
+            getProcedure();
+            
             createUser = fopen("data/doctor.txt", "w");
             break;
         case 3:
@@ -123,7 +107,7 @@ int record(int view, int flag){
             break;
     }    
     
-    fprintf(createUser, "%s\n%s\n%s\n\n", name, cpf, info);
+    fprintf(createUser, "%s\n%s\n\n", name, cpf, info);
     fclose(createUser);
     return 1;
 }
@@ -168,7 +152,7 @@ void homeScreen(int *choice){
 }
 
 int main(){
-    int view, choice, option;
+    int view, choice, option = 0;
 
     roleScreen(&view);
     homeScreen(&choice);   
@@ -200,18 +184,16 @@ int main(){
 
     // Marcação da Consulta
     if (view == 1){
-        preAppointment(&option);
+        printf(LIMPAR);
+        printf("\t\tMarcação de Consulta\n\n");
+        printf("Opções de Procedimentos:\n\n");
+        printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
+        printf("Escolha um: ");
+        scanf("%d", &option);
 
-        if (option == 1){ // por Procedimento 
-            printf("Procedimento: ");
+        //procurar médicos que ofertem o procedimento e mostrar na tela pro paciente escolher 
 
-        } 
-
-        else if (option == 2){ // por Médico
-            printf("Médico: ");
-        }
-
-        appointment();
+        appointment(); 
     }
     else if (view == 2){
         doctorScreen(&option);
@@ -220,7 +202,7 @@ int main(){
 
         }
         else if (option == 2){
-
+            
         }
         else if (option == 3){
 
