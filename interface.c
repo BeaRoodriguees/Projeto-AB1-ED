@@ -145,6 +145,7 @@ void roleScreen(int *view){
         return roleScreen(view);
     }
     (*view) = temp;
+    return;
 }
 
 //Tela Incial
