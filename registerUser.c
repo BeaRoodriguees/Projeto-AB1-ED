@@ -4,33 +4,13 @@
 #include "libs/checkCPF.c"
 #define MAX_LEN 100
 
-//Falta pegar os dias de atendimento do médico (outra função??)
-
-void getProcedure(){
+void getInfos(){
     FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
-    char *days, *t;
-    printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
-    fgets(days, 10, stdin);
+    char *infos, *t;
+    printf("Informe: ");
+    fgets(infos, 50, stdin);
 
-    t = strtok(days,", ");
-
-    while (t != NULL)
-    {
-        if (atoi(t) > 0 && atoi(t) < 7) fprintf(doctorInfos, "%d ", atoi(t));
-        t = strtok(NULL, ", ");
-    }
-    printf("\n");
-    fclose(doctorInfos);
-}
-}
-
-void getServiceDay(){
-    FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
-    char *days, *t;
-    printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
-    fgets(days, 10, stdin);
-
-    t = strtok(days,", ");
+    t = strtok(infos,", ");
 
     while (t != NULL)
     {
@@ -136,7 +116,13 @@ int registerUser(int view){
     else if (view == 2){
         if(validReg(cpf_save, "data/listDoctors.txt")){
             salveReg(name, cpf_save, infos, "data/listDoctors.txt");
-            getServiceDay();
+            
+            printf("\nOpções de Procedimentos:\n");
+            printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
+            getInfos();
+
+            printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
+            getInfos();
             return 1;    
         }
     }

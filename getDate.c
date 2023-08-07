@@ -128,7 +128,7 @@ data opcConsulta(data consulta){
 
 //Saber quem é o médico 
 int checkServiceDay(){
-
+    return 1;
 }
 
 int appointment(){
@@ -160,6 +160,8 @@ int appointment(){
             
             if (choice == 1){
                 // Marcar a Consulta
+                printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+                return 1;
             }
             else if (choice == 2){
                 return appointment();
@@ -171,12 +173,15 @@ int appointment(){
             return 1;
         }
     }
-    else{
-        printf("A data inserida é inválida. Tente novamente\n");
-        sleep(4);
-        printf("\e[H\e[2J");
-        return appointment();
+    else if(checkServiceDay()){
+        printf("A consulta foi marcada para o dia: %d/%d/%d\n", consulta.tm_mday, consulta.tm_mon, consulta.tm_year);
+        return 1;
     }
+
+    printf("A data inserida é inválida. Tente novamente\n");
+    sleep(4);
+    printf("\e[H\e[2J");
+    return appointment();
 
     return -1;
 }

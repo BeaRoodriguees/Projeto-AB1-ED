@@ -91,13 +91,11 @@ int record(int view, int flag){
             fgets(info, MAX_LEN, stdin);
             info[strcspn(info, "\n")] = 0;
             createUser = fopen("data/pacient.txt", "w");
+            fprintf(createUser, "%s\n%s\n%s\n\n", name, cpf, info);
             break;
         case 2:
-            printf("Opções de Procedimentos:\n\n");
-            printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
-            getProcedure();
-            
             createUser = fopen("data/doctor.txt", "w");
+            fprintf(createUser, "%s\n%s\n\n", name, cpf);            
             break;
         case 3:
             // admin
@@ -107,7 +105,6 @@ int record(int view, int flag){
             break;
     }    
     
-    fprintf(createUser, "%s\n%s\n\n", name, cpf, info);
     fclose(createUser);
     return 1;
 }
@@ -186,7 +183,7 @@ int main(){
     if (view == 1){
         printf(LIMPAR);
         printf("\t\tMarcação de Consulta\n\n");
-        printf("Opções de Procedimentos:\n\n");
+        printf("Estas são as opções de Procedimentos que ofertamos no momento:\n");
         printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
         printf("Escolha um: ");
         scanf("%d", &option);

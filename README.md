@@ -47,3 +47,9 @@ Repositório para os Projetos para AB1 da disciplina Estrutura de Dados do Curso
 - Paciente;
 - Dia (Obs.: você deve considerar feriados nacionais, estaduais e municipais);
 
+
+
+## FALTA:
+getDate:
+     - checkServiceDay();
+     - 
