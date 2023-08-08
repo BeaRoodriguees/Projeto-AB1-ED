@@ -64,7 +64,6 @@ int preLogin(int view){
     printf("Autenticação realizada com sucesso! Redirecionando...\n");
     sleep(2);
     return 1;
-    //prox tela
 }
 
 // Cadastra o User num .txt
@@ -91,41 +90,23 @@ int record(int view, int flag){
             fgets(info, MAX_LEN, stdin);
             info[strcspn(info, "\n")] = 0;
             createUser = fopen("data/pacient.txt", "w");
-            fprintf(createUser, "%s\n%s\n%s\n\n", name, cpf, info);
             break;
         case 2:
             createUser = fopen("data/doctor.txt", "w");
-            fprintf(createUser, "%s\n%s\n\n", name, cpf);            
+            getServiceDays(info); // Dias de atendimento
             break;
         case 3:
             // admin
+            return 0;
             break;
         default:
             return 0;
             break;
     }    
-    
+
+    fprintf(createUser, "%s\n%s\n%s\n\n", name, cpf, info);
     fclose(createUser);
     return 1;
-}
-
-//Tela Inicial Geral -- Escolher o cargo
-void roleScreen(int *view){
-    int temp;
-
-    printf(LIMPAR);
-    printf("\t\tMarcação de Consulta -- Escolha de Cargo\n\n");
-    printf("Escolha uma das opções abaixo:\n\n");
-    printf("[1] - Paciente\n[2] - Médico\n[3] - Admin\n");
-    printf("Escolha: ");
-    scanf("%d", &temp);
-    
-    if (temp < 1 || temp > 3){
-        printf("O cargo insiro é inválido. Tente novamente.\n");
-        sleep(2);
-        return roleScreen(view);
-    }
-    (*view) = temp;
 }
 
 //Tela Incial
@@ -142,10 +123,29 @@ void homeScreen(int *choice){
     if (temp < 1 || temp > 3){
         printf("A opção escolhida é inválida. Tente novamente.\n");
         sleep(2);
-        return roleScreen(choice);
+        return homeScreen(choice);
     }
 
     (*choice) = temp;
+}
+
+//Tela Inicial Geral -- Escolher o cargo
+void roleScreen(int *view){
+    int temp;
+
+    printf(LIMPAR);
+    printf("\t\tMarcação de Consulta -- Escolha de Cargo\n\n");
+    printf("Escolha uma das opções abaixo:\n\n");
+    printf("[1] - Paciente\n[2] - Médico\n"); // Colocar o admin, posteriormente
+    printf("Escolha: ");
+    scanf("%d", &temp);
+    
+    if (temp < 1 || temp > 3){
+        printf("O cargo insiro é inválido. Tente novamente.\n");
+        sleep(2);
+        return roleScreen(view);
+    }
+    (*view) = temp;
 }
 
 int main(){
@@ -189,8 +189,7 @@ int main(){
         scanf("%d", &option);
 
         //procurar médicos que ofertem o procedimento e mostrar na tela pro paciente escolher 
-
-        appointment(); 
+        //appointment(); 
     }
     else if (view == 2){
         doctorScreen(&option);

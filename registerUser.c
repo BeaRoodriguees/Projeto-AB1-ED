@@ -4,21 +4,76 @@
 #include "libs/checkCPF.c"
 #define MAX_LEN 100
 
-void getInfos(){
-    FILE *doctorInfos = fopen("data/listDoctors.txt", "ab");
-    char *infos, *t;
-    printf("Informe: ");
-    fgets(infos, 50, stdin);
-
-    t = strtok(infos,", ");
-
-    while (t != NULL)
-    {
-        if (atoi(t) > 0 && atoi(t) < 7) fprintf(doctorInfos, "%d ", atoi(t));
-        t = strtok(NULL, ", ");
+const char *procedure(int option){
+    if (option == 1){ // Aftas
+        return "data/procedure/afta.txt";
     }
-    printf("\n");
+    else if (option == 2){ // Hipersensibilidade
+        return "data/procedure/hipersensibilidade.txt";
+    }
+    else if (option == 3){ // Lesões
+        return "data/procedure/lesoes.txt";
+    }
+    else if (option == 4){ // Pós-cirúrgia
+        return "data/procedure/pos-cirurgia.txt";
+    }
+    else if (option == 5){ // Nevralgia
+        return "data/procedure/nevralgia.txt";
+    }
+    else if (option == 6){ // Consulta
+        return "data/procedure/consulta.txt";
+    }
+}
+
+void getProcedure(char *name){
+    FILE *doctorProcedure;
+    char *t, j[] = ", ";
+    char temp[20];
+    
+    memset(temp, 0, strlen(temp));
+    printf("\nOpções de Procedimentos:\n");
+    printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
+    printf("\nInforme: ");
+    fgets(temp, 20, stdin);
+    
+    t = strtok(temp, j);
+
+    while (t != NULL){
+        if (atoi(t) >= 1 && atoi(t) < 7){
+            const char *fileProcedure = procedure(atoi(t));
+            doctorProcedure = fopen(fileProcedure, "a");
+            fprintf(doctorProcedure,"%s\n", name);
+            fclose(doctorProcedure);    
+        } 
+
+        t = strtok(NULL, j);
+    }
+    
+    return;
+}
+
+// Recolhe os dias de atendimento
+void getServiceDays(char *infos){
+    FILE *doctorInfos = fopen("data/doctor.txt", "a");
+    char *t, j[] = ", ";
+    char temp[20];
+    memset(temp, 0, strlen(temp));
+    memset(infos, 0, MAX_LEN);
+
+    printf("Informe os dias de atendimento (2 [Seg], ..., 7 [Sab]): ");
+    fgets(temp, 20, stdin);
+    t = strtok(temp, j);
+
+    while (t != NULL){
+        if (atoi(t) > 1 && atoi(t) <= 7){
+            strcat(infos, t);
+            strcat(infos, " ");
+        } 
+        t = strtok(NULL, j);
+    }
+
     fclose(doctorInfos);
+    return;
 }
 
 //obtem os dados gerados pelo formulario
@@ -74,7 +129,7 @@ int validReg(char *cpf, const char *fileUser){
 
 //funçao que salva o cadastro
 int salveReg(char *name, char *cpf_save, char *infos, const char *userFile){
-    FILE *userValid = fopen(userFile, "ab");
+    FILE *userValid = fopen(userFile, "a");
 
     if (userValid == NULL){
         printf("Erro ao abrir o arquivo.\n");
@@ -114,15 +169,9 @@ int registerUser(int view){
         }
     }
     else if (view == 2){
-        if(validReg(cpf_save, "data/listDoctors.txt")){
+        if(validReg(cpf_save, "data/listDoctors.txt")){          
             salveReg(name, cpf_save, infos, "data/listDoctors.txt");
-            
-            printf("\nOpções de Procedimentos:\n");
-            printf("[1] - Aftas\n[2] - Hipersensibilidade\n[3] - Lesões\n[4] - Pós-cirúrgia\n[5] - Nevralgia\n[6] - Consulta\n");
-            getInfos();
-
-            printf("Informe os dias de atendimento (2 - Seg, ..., 7 - Sab): ");
-            getInfos();
+            getProcedure(name);
             return 1;    
         }
     }
